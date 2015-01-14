@@ -35,10 +35,6 @@ standalone CSSTransitionGroup for React.addons.CSSTransitionGroup
 
 * support ie8,ie8+,chrome,firefox,safari
 
-### Keyboard
-
-
-
 ## install
 
 [![rc-css-transition-group](https://nodei.co/npm/rc-css-transition-group.png)](https://npmjs.org/package/rc-css-transition-group)
@@ -49,6 +45,7 @@ standalone CSSTransitionGroup for React.addons.CSSTransitionGroup
 var CSSTransitionGroup = require('rc-css-transition-group');
 var React = require('react');
 React.render(<CSSTransitionGroup />, container);
+```
 
 ## API
 
