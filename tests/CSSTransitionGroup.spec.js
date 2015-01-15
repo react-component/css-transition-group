@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+
+// cao not run in phantomjs, fail!
 var CSSTransitionGroup = require('../');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
@@ -87,6 +89,7 @@ describe('CSSTransitionGroup', function () {
   }
 
   it('transitionLeave works', function (done) {
+    this.timeout(5999);
     list.handleRemove(0);
     setTimeout(function () {
       expect(TestUtils.scryRenderedDOMComponentsWithClass(list, 'item').length).to.be(4);
@@ -102,6 +105,7 @@ describe('CSSTransitionGroup', function () {
   });
 
   it('transitionLeave works', function (done) {
+    this.timeout(5999);
     list.handleAdd(Date.now());
     setTimeout(function () {
       expect(TestUtils.scryRenderedDOMComponentsWithClass(list, 'item').length).to.be(5);
