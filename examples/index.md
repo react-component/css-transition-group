@@ -44,6 +44,7 @@
   opacity: 0.01;
 }
 </style>
+<button id='alertBtn'>alert</button>
 ````
 
 ````js
@@ -147,13 +148,15 @@ function alert(str, time, type, callback) {
   });
 }
 
-for(var i=0;i<4;i++){
-  (function(i){
-    setTimeout(function(){
-      alert(i);
-    }, 1000*i);
-  })(i);
-}
+document.getElementById('alertBtn').onclick=function(){
+  for(var i=0;i<4;i++){
+    (function(i){
+      setTimeout(function(){
+        alert(i);
+      }, 1000*i);
+    })(i);
+  }
+};
 ````
 
 ## TodoList
