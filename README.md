@@ -10,9 +10,9 @@ standalone CSSTransitionGroup for React.addons.CSSTransitionGroup
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
-[![Sauce Test Status](https://saucelabs.com/buildstatus/rc-css-transition-group)](https://saucelabs.com/u/rc-css-transition-group)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/css-transition-group)](https://saucelabs.com/u/css-transition-group)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/rc-css-transition-group.svg)](https://saucelabs.com/u/rc-css-transition-group)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/css-transition-group.svg)](https://saucelabs.com/u/css-transition-group)
 
 [npm-image]: http://img.shields.io/npm/v/rc-css-transition-group.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-css-transition-group
@@ -29,7 +29,7 @@ standalone CSSTransitionGroup for React.addons.CSSTransitionGroup
 
 ## Screenshots
 
-
+![](http://gtms02.alicdn.com/tps/i2/TB1l3yrHXXXXXXWXpXXM9PE9pXX-446-343.png)
 
 ## Feature
 
@@ -44,10 +44,49 @@ standalone CSSTransitionGroup for React.addons.CSSTransitionGroup
 ```js
 var CSSTransitionGroup = require('rc-css-transition-group');
 var React = require('react');
-React.render(<CSSTransitionGroup />, container);
+React.render(<CSSTransitionGroup><p>1</p><p>2</p></CSSTransitionGroup>, container);
 ```
 
 ## API
+
+### props
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th style="width: 100px;">name</th>
+        <th style="width: 50px;">type</th>
+        <th style="width: 50px;">default</th>
+        <th>description</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>component</td>
+          <td>React.Element/String</td>
+          <td>'span'</td>
+          <td>wrap dom node or component for children</td>
+        </tr>
+        <tr>
+          <td>transitionName</td>
+          <td>String</td>
+          <td></td>
+          <td>transitionName, need to specify corresponding css, for details to see index.md</td>
+        </tr>
+        <tr>
+          <td>transitionEnter</td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>whether support transition enter anim</td>
+        </tr>
+       <tr>
+         <td>transitionLeave</td>
+         <td>Boolean</td>
+         <td>true</td>
+         <td>whether support transition leave anim</td>
+       </tr>
+    </tbody>
+</table>
 
 http://facebook.github.io/react/docs/animation.html
 

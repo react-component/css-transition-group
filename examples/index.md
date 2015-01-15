@@ -36,6 +36,25 @@
 /** @jsx React.DOM */
 var CSSTransitionGroup = require('../');
 var React = require('react');
+var Todo = React.createClass({
+  getDefaultProps: function(){
+    return {
+      end: function(){
+      }
+    }
+  },
+  componentWillUnmount: function(){
+    console.log('componentWillUnmount');
+    console.log(this.props.children);
+    this.props.end();
+  },
+  render: function(){
+    var props = this.props;
+    return <div onClick={this.props.onClick} className="item">
+             {props.children}
+           </div>;
+  }
+});
 var TodoList = React.createClass({
   getInitialState: function () {
     return {items: ['hello', 'world', 'click', 'me']};
@@ -53,9 +72,9 @@ var TodoList = React.createClass({
   render: function () {
     var items = this.state.items.map(function (item, i) {
       return (
-        <div key={item} onClick={this.handleRemove.bind(this, i)} className="item">
+        <Todo key={item} onClick={this.handleRemove.bind(this, i)}>
           {item}
-        </div>
+        </Todo>
       );
     }.bind(this));
     return (
