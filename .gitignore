@@ -24,4 +24,5 @@ sea-modules
 spm_modules
 .cache
 dist
+build
 assets/**/*.css

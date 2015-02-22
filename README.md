@@ -4,7 +4,6 @@
 standalone CSSTransitionGroup for React.addons.CSSTransitionGroup
 
 [![NPM version][npm-image]][npm-url]
-[![SPM version](http://spmjs.io/badge/rc-css-transition-group)](http://spmjs.io/package/rc-css-transition-group)
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
@@ -90,8 +89,6 @@ React.render(<CSSTransitionGroup><p>1</p><p>2</p></CSSTransitionGroup>, containe
 
 http://facebook.github.io/react/docs/animation.html
 
-online docs: http://spmjs.io/docs/rc-css-transition-group/
-
 ## Development
 
 ```
@@ -103,7 +100,7 @@ npm start
 
 http://localhost:8010/examples/index.md
 
-online example: http://spmjs.io/docs/rc-css-transition-group/examples/
+online example: http://react-component.github.io/css-transition-group/build/examples/
 
 ## Test Case
 
