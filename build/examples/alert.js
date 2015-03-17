@@ -1,22 +1,16 @@
 webpackJsonp([0],[
 /* 0 */
-/*!*******************!*\
-  !*** multi alert ***!
-  \*******************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./examples/alert.js */1);
+	module.exports = __webpack_require__(1);
 
 
 /***/ },
 /* 1 */
-/*!***************************!*\
-  !*** ./examples/alert.js ***!
-  \***************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
-	
+
 	var style = '.alert-outer{\
 	position: fixed;\
 	width:100%;\
@@ -55,12 +49,12 @@ webpackJsonp([0],[
 	.alert-anim-leave.alert-anim-leave-active {\
 	  opacity: 0.01;\
 	}';
-	
+
 	/** @jsx React.DOM */
-	var React = __webpack_require__(/*! react */ 3);
-	var CSSTransitionGroup = __webpack_require__(/*! rc-css-transition-group */ 4);
+	var React = __webpack_require__(3);
+	var CSSTransitionGroup = __webpack_require__(4);
 	var seed = 0;
-	
+
 	var Alert = React.createClass({displayName: "Alert",
 	  protoTypes: {
 	    time: React.PropTypes.number,
@@ -68,7 +62,7 @@ webpackJsonp([0],[
 	    str: React.PropTypes.string,
 	    onEnd: React.PropTypes.func
 	  },
-	
+
 	  getDefaultProps: function () {
 	    return {
 	      onEnd: function () {
@@ -77,21 +71,21 @@ webpackJsonp([0],[
 	      type: 'success'
 	    }
 	  },
-	
+
 	  componentDidMount: function () {
 	    var props = this.props;
 	    setTimeout(function () {
 	      props.onEnd();
 	    }, props.time);
 	  },
-	
+
 	  render: function () {
 	    var props = this.props;
 	    return React.createElement("div", {className: "alert alert-" + props.type}, props.str);
 	  }
 	});
-	
-	
+
+
 	var AlertGroup = React.createClass({displayName: "AlertGroup",
 	  getInitialState: function () {
 	    return {
@@ -139,9 +133,9 @@ webpackJsonp([0],[
 	    );
 	  }
 	});
-	
+
 	var alertGroup;
-	
+
 	function alert(str, time, type, callback) {
 	  if (!alertGroup) {
 	    var div = document.createElement('div');
@@ -155,7 +149,7 @@ webpackJsonp([0],[
 	    callback: callback
 	  });
 	}
-	
+
 	function onClick() {
 	  for (var i = 0; i < 4; i++) {
 	    (function (i) {
@@ -165,7 +159,7 @@ webpackJsonp([0],[
 	    })(i);
 	  }
 	}
-	
+
 	React.render(React.createElement("div", null, 
 	    React.createElement("h1", null, "notification"), 
 	    React.createElement("style", null, style), 
@@ -176,4 +170,3 @@ webpackJsonp([0],[
 
 /***/ }
 ]);
-//# sourceMappingURL=alert.js.map

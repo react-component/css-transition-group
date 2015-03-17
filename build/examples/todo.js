@@ -1,19 +1,13 @@
 webpackJsonp([1],[
 /* 0 */
-/*!******************!*\
-  !*** multi todo ***!
-  \******************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./examples/todo.js */2);
+	module.exports = __webpack_require__(2);
 
 
 /***/ },
 /* 1 */,
 /* 2 */
-/*!**************************!*\
-  !*** ./examples/todo.js ***!
-  \**************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -41,9 +35,9 @@ webpackJsonp([1],[
 	  padding:10px;\
 	  margin:10px;\
 	}';
-	
-	var CSSTransitionGroup = __webpack_require__(/*! rc-css-transition-group */ 4);
-	var React = __webpack_require__(/*! react */ 3);
+
+	var CSSTransitionGroup = __webpack_require__(4);
+	var React = __webpack_require__(3);
 	var Todo = React.createClass({displayName: "Todo",
 	  getDefaultProps: function () {
 	    return {
@@ -95,7 +89,7 @@ webpackJsonp([1],[
 	    );
 	  }
 	});
-	
+
 	React.render(React.createElement("div", null, 
 	  React.createElement("h1", null, "Todo"), 
 	  React.createElement("style", null, style), 
@@ -105,4 +99,3 @@ webpackJsonp([1],[
 
 /***/ }
 ]);
-//# sourceMappingURL=todo.js.map
