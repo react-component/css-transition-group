@@ -180,7 +180,7 @@
 <body>
 <div id="__react-content"></div>
 <script src="common.js?nowrap"></script>
-<script src="todo.js?nowrap"></script>
+<script src="hide-todo.js?nowrap"></script>
 <div class="highlight">
 <pre>
 <span class="hljs-comment">/** @jsx React.DOM */</span>
@@ -211,9 +211,12 @@ transition: opacity 1s ease-in;\
 
 <span class="hljs-keyword">var</span> CSSTransitionGroup = require(<span class="hljs-string">'rc-css-transition-group'</span>);
 <span class="hljs-keyword">var</span> React = require(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> assign = require(<span class="hljs-string">'object-assign'</span>);
+
 <span class="hljs-keyword">var</span> Todo = React.createClass({
   getDefaultProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
+      visible: <span class="hljs-literal">true</span>,
       end: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       }
     }
@@ -225,37 +228,45 @@ transition: opacity 1s ease-in;\
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> props = <span class="hljs-keyword">this</span>.props;
-    <span class="hljs-keyword">return</span> &lt;div onClick={<span class="hljs-keyword">this</span>.props.onClick} className=<span class="hljs-string">"item"</span>&gt;
-             {props.children}
+    <span class="hljs-keyword">return</span> &lt;div onClick={<span class="hljs-keyword">this</span>.props.onClick}
+      style={{display: props.visible ? <span class="hljs-string">'block'</span> : <span class="hljs-string">'none'</span>}}
+      className=<span class="hljs-string">"item"</span>&gt;
+      {props.children}
     &lt;/div&gt;;
   }
 });
 <span class="hljs-keyword">var</span> TodoList = React.createClass({
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> {items: [<span class="hljs-string">'hello'</span>, <span class="hljs-string">'world'</span>, <span class="hljs-string">'click'</span>, <span class="hljs-string">'me'</span>]};
+    <span class="hljs-keyword">return</span> {
+      items: [
+        {content: <span class="hljs-string">'hello'</span>, visible: <span class="hljs-literal">true</span>},
+        {content: <span class="hljs-string">'world'</span>, visible: <span class="hljs-literal">true</span>},
+        {content: <span class="hljs-string">'click'</span>, visible: <span class="hljs-literal">true</span>},
+        {content: <span class="hljs-string">'me'</span>, visible: <span class="hljs-literal">true</span>}]
+    };
   },
-  handleAdd: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> newItems =
-      <span class="hljs-keyword">this</span>.state.items.concat([prompt(<span class="hljs-string">'Enter some text'</span>)]);
-    <span class="hljs-keyword">this</span>.setState({items: newItems});
-  },
-  handleRemove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(i)</span> </span>{
-    <span class="hljs-keyword">var</span> newItems = <span class="hljs-keyword">this</span>.state.items;
-    newItems.splice(i, <span class="hljs-number">1</span>);
+  handleHide: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(i, item)</span> </span>{
+    <span class="hljs-keyword">var</span> newItems = <span class="hljs-keyword">this</span>.state.items.concat([]);
+    newItems[i] = assign({}, item, {
+      visible: <span class="hljs-literal">false</span>
+    });
     <span class="hljs-keyword">this</span>.setState({items: newItems});
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> items = <span class="hljs-keyword">this</span>.state.items.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item, i)</span> </span>{
       <span class="hljs-keyword">return</span> (
-        &lt;Todo key={item} onClick={<span class="hljs-keyword">this</span>.handleRemove.bind(<span class="hljs-keyword">this</span>, i)}&gt;
-          {item}
+        &lt;Todo key={item.content}
+          visible={item.visible}
+          onClick={<span class="hljs-keyword">this</span>.handleHide.bind(<span class="hljs-keyword">this</span>, i, item)}&gt;
+          {item.content}
         &lt;/Todo&gt;
       );
     }.bind(<span class="hljs-keyword">this</span>));
     <span class="hljs-keyword">return</span> (
       &lt;div&gt;
-        &lt;button onClick={<span class="hljs-keyword">this</span>.handleAdd}&gt;Add Item&lt;/button&gt;
-        &lt;CSSTransitionGroup transitionName=<span class="hljs-string">"example"</span>&gt;
+        &lt;CSSTransitionGroup
+          showProp=<span class="hljs-string">"visible"</span>
+          transitionName=<span class="hljs-string">"example"</span>&gt;
           {items}
         &lt;/CSSTransitionGroup&gt;
       &lt;/div&gt;
@@ -264,7 +275,7 @@ transition: opacity 1s ease-in;\
 });
 
 React.render(&lt;div&gt;
-  &lt;h1&gt;Todo&lt;/h1&gt;
+  &lt;h1&gt;Hide Todo&lt;/h1&gt;
   &lt;style&gt;{style}&lt;/style&gt;
   &lt;TodoList /&gt;
 &lt;/div&gt;, document.getElementById(<span class="hljs-string">'__react-content'</span>));
