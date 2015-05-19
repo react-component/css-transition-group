@@ -20,7 +20,7 @@ var ReactTransitionEvents = require("./ReactTransitionEvents");
 var TICK = 17;
 
 var ReactCSSTransitionGroupChild = React.createClass({
-  transition: function (animationType, finishCallback) {
+  transition(animationType, finishCallback) {
     var node = this.getDOMNode();
     var className = this.props.name + '-' + animationType;
     var activeClassName = className + '-active';
@@ -50,7 +50,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
     this.queueClass(activeClassName);
   },
 
-  queueClass: function (className) {
+  queueClass(className) {
     this.classNameQueue.push(className);
 
     if (!this.timeout) {
@@ -58,7 +58,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
     }
   },
 
-  flushClassNameQueue: function () {
+  flushClassNameQueue() {
     if (this.isMounted()) {
       this.classNameQueue.forEach(
         CSSCore.addClass.bind(CSSCore, this.getDOMNode())
@@ -68,17 +68,17 @@ var ReactCSSTransitionGroupChild = React.createClass({
     this.timeout = null;
   },
 
-  componentWillMount: function () {
+  componentWillMount() {
     this.classNameQueue = [];
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
   },
 
-  componentWillEnter: function (done) {
+  componentWillEnter(done) {
     if (this.props.enter) {
       this.transition('enter', done);
     } else {
@@ -86,7 +86,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
     }
   },
 
-  componentWillLeave: function (done) {
+  componentWillLeave(done) {
     if (this.props.leave) {
       this.transition('leave', done);
     } else {
@@ -94,7 +94,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
     }
   },
 
-  render: function () {
+  render() {
     return this.props.children;
   }
 });

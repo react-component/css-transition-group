@@ -12,7 +12,7 @@ var CSSTransitionGroup = React.createClass({
     transitionLeave: React.PropTypes.bool
   },
 
-  getDefaultProps: function () {
+  getDefaultProps() {
     return {
       component: 'span',
       transitionEnter: true,
@@ -20,9 +20,9 @@ var CSSTransitionGroup = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  getInitialState() {
     var ret = [];
-    React.Children.forEach(this.props.children, function (c) {
+    React.Children.forEach(this.props.children, (c)=> {
       ret.push(c);
     });
     return {
@@ -30,15 +30,17 @@ var CSSTransitionGroup = React.createClass({
     };
   },
 
-  componentWillMount: function () {
+  componentWillMount() {
     this.currentlyTransitioningKeys = {};
     this.keysToEnter = [];
     this.keysToLeave = [];
   },
 
-  componentWillReceiveProps: function (nextProps) {
+  componentWillReceiveProps(nextProps) {
     var nextChildMapping = [];
-    React.Children.forEach(nextProps.children, function (c) {
+    var showProp = this.props.showProp;
+
+    React.Children.forEach(nextProps.children, (c)=> {
       nextChildMapping.push(c);
     });
     var prevChildMapping = this.state.children;
@@ -46,30 +48,56 @@ var CSSTransitionGroup = React.createClass({
       prevChildMapping,
       nextChildMapping
     );
+
+    if (showProp) {
+      newChildren = newChildren.map((c)=> {
+        if (!c.props[showProp] && ReactTransitionChildMapping.isShownInChildren(prevChildMapping, c, showProp)) {
+          var newProps = {};
+          newProps[showProp] = true;
+          c = React.cloneElement(c, newProps);
+        }
+        return c;
+      });
+    }
+
     this.setState({
       children: newChildren
     });
 
-    var self = this;
-
-    nextChildMapping.forEach(function (c) {
+    nextChildMapping.forEach((c)=> {
       var key = c.key;
       var hasPrev = prevChildMapping && ReactTransitionChildMapping.inChildren(prevChildMapping, c);
-      if (!hasPrev && !self.currentlyTransitioningKeys[key]) {
-        self.keysToEnter.push(key);
+      if (showProp) {
+        if (hasPrev) {
+          var showInPrev = ReactTransitionChildMapping.isShownInChildren(prevChildMapping, c, showProp);
+          var showInNow = c.props[showProp];
+          if (!showInPrev && showInNow && !this.currentlyTransitioningKeys[key]) {
+            this.keysToEnter.push(key);
+          }
+        }
+      } else if (!hasPrev && !this.currentlyTransitioningKeys[key]) {
+        this.keysToEnter.push(key);
       }
     });
 
-    prevChildMapping.forEach(function (c) {
+    prevChildMapping.forEach((c)=> {
       var key = c.key;
       var hasNext = nextChildMapping && ReactTransitionChildMapping.inChildren(nextChildMapping, c);
-      if (!hasNext && !self.currentlyTransitioningKeys[key]) {
-        self.keysToLeave.push(key);
+      if (showProp) {
+        if (hasNext) {
+          var showInNext = ReactTransitionChildMapping.isShownInChildren(nextChildMapping, c, showProp);
+          var showInNow = c.props[showProp];
+          if (!showInNext && showInNow && !this.currentlyTransitioningKeys[key]) {
+            this.keysToLeave.push(key);
+          }
+        }
+      } else if (!hasNext && !this.currentlyTransitioningKeys[key]) {
+        this.keysToLeave.push(key);
       }
     });
   },
 
-  performEnter: function (key) {
+  performEnter(key) {
     this.currentlyTransitioningKeys[key] = true;
     var component = this.refs[key];
     if (component.componentWillEnter) {
@@ -81,18 +109,21 @@ var CSSTransitionGroup = React.createClass({
     }
   },
 
-  _handleDoneEntering: function (key) {
+  _handleDoneEntering(key) {
     delete this.currentlyTransitioningKeys[key];
-
     var currentChildMapping = this.props.children;
-
-    if (!currentChildMapping || !ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)) {
+    var showProp = this.props.showProp;
+    if (!currentChildMapping || (
+      !showProp && !ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)
+      ) || (
+      showProp && !ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)
+      )) {
       // This was removed before it had fully entered. Remove it.
       this.performLeave(key);
     }
   },
 
-  performLeave: function (key) {
+  performLeave(key) {
     this.currentlyTransitioningKeys[key] = true;
 
     var component = this.refs[key];
@@ -106,27 +137,22 @@ var CSSTransitionGroup = React.createClass({
     }
   },
 
-  _handleDoneLeaving: function (key) {
+  _handleDoneLeaving(key) {
     delete this.currentlyTransitioningKeys[key];
-
+    var showProp = this.props.showProp;
     var currentChildMapping = this.props.children;
-
-    if (currentChildMapping && ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)) {
+    if (showProp && currentChildMapping &&
+      ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)) {
+      this.performEnter(key);
+    } else if (!showProp && currentChildMapping && ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)) {
       // This entered again before it fully left. Add it again.
       this.performEnter(key);
     } else {
-      var newChildren = [];
-      this.state.children.map(function (c) {
-        if (c.key === key) {
-          return;
-        }
-        newChildren.push(c);
-      });
-      this.setState({children: newChildren});
+      this.setState({children: currentChildMapping});
     }
   },
 
-  componentDidUpdate: function () {
+  componentDidUpdate() {
     var keysToEnter = this.keysToEnter;
     this.keysToEnter = [];
     keysToEnter.forEach(this.performEnter);
@@ -135,9 +161,9 @@ var CSSTransitionGroup = React.createClass({
     keysToLeave.forEach(this.performLeave);
   },
 
-  render: function () {
+  render() {
     var props = this.props;
-    var children = this.state.children.map(function (child) {
+    var children = this.state.children.map((child) => {
       return <CSSTransitionGroupChild
         key={child.key}
         ref={child.key}

@@ -1,7 +1,7 @@
 # rc-css-transition-group
 ---
 
-standalone CSSTransitionGroup for React.addons.CSSTransitionGroup
+standalone and enhanced CSSTransitionGroup for React.addons.CSSTransitionGroup
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
@@ -67,10 +67,16 @@ React.render(<CSSTransitionGroup><p>1</p><p>2</p></CSSTransitionGroup>, containe
           <td>wrap dom node or component for children</td>
         </tr>
         <tr>
+          <td><span style="color:red;">showProp</span></td>
+          <td>String</td>
+          <td></td>
+          <td>using prop for show and hide. [demo]() </td>
+        </tr>
+        <tr>
           <td>transitionName</td>
           <td>String</td>
           <td></td>
-          <td>transitionName, need to specify corresponding css, for details to see index.md</td>
+          <td>transitionName, need to specify corresponding css</td>
         </tr>
         <tr>
           <td>transitionEnter</td>

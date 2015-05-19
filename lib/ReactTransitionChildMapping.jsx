@@ -12,7 +12,18 @@ function inChildren(children, child) {
 module.exports = {
   inChildren: inChildren,
 
-  inChildrenByKey: function (children, key) {
+  isShownInChildren(children, child, showProp) {
+    var found = 0;
+    children.forEach(function (c) {
+      if (found) {
+        return;
+      }
+      found = (c.key === child.key && c.props[showProp]);
+    });
+    return found;
+  },
+
+  inChildrenByKey(children, key) {
     var found = 0;
     children.forEach(function (c) {
       if (found) {
@@ -23,7 +34,18 @@ module.exports = {
     return found;
   },
 
-  mergeChildMappings: function (prev, next) {
+  isShownInChildrenByKey(children, key, showProp) {
+    var found = 0;
+    children.forEach(function (c) {
+      if (found) {
+        return;
+      }
+      found = c.key === key && c.props[showProp];
+    });
+    return found;
+  },
+
+  mergeChildMappings(prev, next) {
     var ret = [];
 
     // For each key of `next`, the list of keys to insert before that key in

@@ -6,11 +6,11 @@ var norm = function (elemClass) {
 };
 
 module.exports = {
-  addClass: function (elem, className) {
+  addClass(elem, className) {
     elem.className += ' ' + className;
   },
 
-  removeClass: function (elem, needle) {
+  removeClass(elem, needle) {
     var elemClass = elem.className.trim();
     var className = norm(elemClass);
     needle = needle.trim();
