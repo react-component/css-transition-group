@@ -231,7 +231,7 @@
 	    if (!currentChildMapping || (
 	      !showProp && !ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)
 	      ) || (
-	      showProp && !ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key)
+	      showProp && !ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)
 	      )) {
 	      // This was removed before it had fully entered. Remove it.
 	      this.performLeave(key);

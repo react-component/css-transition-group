@@ -75,6 +75,11 @@ webpackJsonp([2],[
 	  },
 	  handleHide: function (i, item) {
 	    var newItems = this.state.items.concat([]);
+	    newItems.forEach(function(n, index) {
+	      newItems[index] = assign({}, n, {
+	        visible: true
+	      });
+	    });
 	    newItems[i] = assign({}, item, {
 	      visible: false
 	    });

@@ -247,6 +247,11 @@ transition: opacity 1s ease-in;\
   },
   handleHide: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(i, item)</span> </span>{
     <span class="hljs-keyword">var</span> newItems = <span class="hljs-keyword">this</span>.state.items.concat([]);
+    newItems.forEach((n, index)=&gt; {
+      newItems[index] = assign({}, n, {
+        visible: <span class="hljs-literal">true</span>
+      });
+    });
     newItems[i] = assign({}, item, {
       visible: <span class="hljs-literal">false</span>
     });
