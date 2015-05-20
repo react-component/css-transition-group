@@ -70,7 +70,13 @@ React.render(<CSSTransitionGroup><p>1</p><p>2</p></CSSTransitionGroup>, containe
           <td><span style="color:red;">showProp</span></td>
           <td>String</td>
           <td></td>
-          <td>using prop for show and hide. [demo]() </td>
+          <td>using prop for show and hide. [demo](http://react-component.github.io/css-transition-group/build/examples/hide-todo.html) </td>
+        </tr>
+        <tr>
+          <td><span style="color:red;">exclusive</span></td>
+          <td>Boolean</td>
+          <td></td>
+          <td>whether allow only one set of animations(enter and leave) at the same time. </td>
         </tr>
         <tr>
           <td>transitionName</td>

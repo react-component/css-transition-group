@@ -25,7 +25,11 @@ var ReactCSSTransitionGroupChild = React.createClass({
     var className = this.props.name + '-' + animationType;
     var activeClassName = className + '-active';
 
-    var endListener = function (e) {
+    if (this.endListener) {
+      this.endListener();
+    }
+
+    this.endListener = (e) => {
       if (e && e.target !== node) {
         return;
       }
@@ -33,7 +37,8 @@ var ReactCSSTransitionGroupChild = React.createClass({
       CSSCore.removeClass(node, className);
       CSSCore.removeClass(node, activeClassName);
 
-      ReactTransitionEvents.removeEndEventListener(node, endListener);
+      ReactTransitionEvents.removeEndEventListener(node, this.endListener);
+      this.endListener = null;
 
       // Usually this optional callback is used for informing an owner of
       // a leave animation and telling it to remove the child.
@@ -42,7 +47,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
       }
     };
 
-    ReactTransitionEvents.addEndEventListener(node, endListener);
+    ReactTransitionEvents.addEndEventListener(node, this.endListener);
 
     CSSCore.addClass(node, className);
 
@@ -55,6 +60,18 @@ var ReactCSSTransitionGroupChild = React.createClass({
 
     if (!this.timeout) {
       this.timeout = setTimeout(this.flushClassNameQueue, TICK);
+    }
+  },
+
+  stop() {
+    //console.log('force stop')
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.classNameQueue.length = 0;
+      this.timeout = null;
+    }
+    if (this.endListener) {
+      this.endListener();
     }
   },
 

@@ -39,6 +39,7 @@ var CSSTransitionGroup = React.createClass({
   componentWillReceiveProps(nextProps) {
     var nextChildMapping = [];
     var showProp = this.props.showProp;
+    var exclusive = this.props.exclusive;
 
     React.Children.forEach(nextProps.children, (c)=> {
       nextChildMapping.push(c);
@@ -58,6 +59,13 @@ var CSSTransitionGroup = React.createClass({
         }
         return c;
       });
+    }
+
+    if (exclusive) {
+      newChildren.forEach((c)=> {
+        this.stop(c.key);
+      });
+      prevChildMapping = this.state.children;
     }
 
     this.setState({
@@ -110,6 +118,7 @@ var CSSTransitionGroup = React.createClass({
   },
 
   _handleDoneEntering(key) {
+    //console.log('_handleDoneEntering, ', key);
     delete this.currentlyTransitioningKeys[key];
     var currentChildMapping = this.props.children;
     var showProp = this.props.showProp;
@@ -119,7 +128,18 @@ var CSSTransitionGroup = React.createClass({
       showProp && !ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)
       )) {
       // This was removed before it had fully entered. Remove it.
+      //console.log('releave ',key);
       this.performLeave(key);
+    } else {
+      this.setState({children: currentChildMapping});
+    }
+  },
+
+  stop(key) {
+    delete this.currentlyTransitioningKeys[key];
+    var component = this.refs[key];
+    if (component) {
+      component.stop();
     }
   },
 
@@ -138,6 +158,7 @@ var CSSTransitionGroup = React.createClass({
   },
 
   _handleDoneLeaving(key) {
+    //console.log('_handleDoneLeaving, ', key);
     delete this.currentlyTransitioningKeys[key];
     var showProp = this.props.showProp;
     var currentChildMapping = this.props.children;
@@ -146,6 +167,7 @@ var CSSTransitionGroup = React.createClass({
       this.performEnter(key);
     } else if (!showProp && currentChildMapping && ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)) {
       // This entered again before it fully left. Add it again.
+      //console.log('reenter ',key);
       this.performEnter(key);
     } else {
       this.setState({children: currentChildMapping});
