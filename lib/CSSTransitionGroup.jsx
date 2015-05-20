@@ -44,7 +44,10 @@ var CSSTransitionGroup = React.createClass({
     React.Children.forEach(nextProps.children, (c)=> {
       nextChildMapping.push(c);
     });
-    var prevChildMapping = this.state.children;
+
+    // // last props children if exclusive
+    var prevChildMapping = exclusive ? this.props.children : this.state.children;
+
     var newChildren = ReactTransitionChildMapping.mergeChildMappings(
       prevChildMapping,
       nextChildMapping
@@ -67,8 +70,6 @@ var CSSTransitionGroup = React.createClass({
       newChildren.forEach((c)=> {
         this.stop(c.key);
       });
-      // last props children
-      prevChildMapping = this.props.children;
     }
 
     this.setState({
