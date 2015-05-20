@@ -62,10 +62,13 @@ var CSSTransitionGroup = React.createClass({
     }
 
     if (exclusive) {
+      // make middle state children invalid
+      // restore to last props children
       newChildren.forEach((c)=> {
         this.stop(c.key);
       });
-      prevChildMapping = this.state.children;
+      // last props children
+      prevChildMapping = this.props.children;
     }
 
     this.setState({
