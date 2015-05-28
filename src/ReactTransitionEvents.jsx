@@ -9,7 +9,7 @@
  * @providesModule ReactTransitionEvents
  */
 
-"use strict";
+'use strict';
 /**
  * EVENT_NAME_MAP is used to determine which event fired when a
  * transition/animation ends, based on the style property used to

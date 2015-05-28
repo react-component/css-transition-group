@@ -1,4 +1,5 @@
-/** @jsx React.DOM */
+'use strict';
+
 var style = '.example-enter {\
 opacity: 0.01;\
 transition: opacity 1s ease-in;\

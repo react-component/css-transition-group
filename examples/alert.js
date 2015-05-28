@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+'use strict';
 
 var style = '.alert-outer{\
 position: fixed;\
@@ -39,7 +39,6 @@ z-index: 9999;\
   opacity: 0.01;\
 }';
 
-/** @jsx React.DOM */
 var React = require('react');
 var CSSTransitionGroup = require('rc-css-transition-group');
 var seed = 0;

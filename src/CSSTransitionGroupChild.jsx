@@ -10,12 +10,12 @@
  * @providesModule ReactCSSTransitionGroupChild
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var CSSCore = require("./CSSCore");
-var ReactTransitionEvents = require("./ReactTransitionEvents");
+var CSSCore = require('./CSSCore');
+var ReactTransitionEvents = require('./ReactTransitionEvents');
 
 var TICK = 17;
 

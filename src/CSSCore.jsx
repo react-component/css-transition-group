@@ -1,3 +1,5 @@
+'use strict';
+
 var SPACE = ' ';
 var RE_CLASS = /[\n\t\r]/g;
 

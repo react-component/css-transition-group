@@ -1,3 +1,5 @@
+'use strict';
+
 function inChildren(children, child) {
   var found = 0;
   children.forEach(function (c) {

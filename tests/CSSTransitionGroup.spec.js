@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+'use strict';
 
 
 // cao not run in phantomjs, fail!
@@ -83,7 +83,7 @@ describe('CSSTransitionGroup', function () {
     expect(TestUtils.scryRenderedDOMComponentsWithClass(list, 'item').length).to.be(4);
   });
 
-  var ReactTransitionEvents = require('../lib/ReactTransitionEvents');
+  var ReactTransitionEvents = require('../src/ReactTransitionEvents');
   if (!ReactTransitionEvents.endEvents.length) {
     return;
   }

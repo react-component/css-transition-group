@@ -1,5 +1,3 @@
-/**
- * only require other specs here
- */
+'use strict';
 
 require('./CSSTransitionGroup.spec');
