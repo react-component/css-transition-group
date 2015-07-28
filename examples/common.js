@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"todo","1":"alert","2":"hide-todo"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"alert","1":"hide-todo","2":"todo"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -93,33 +93,41 @@
 /************************************************************************/
 /******/ ([
 /* 0 */,
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(7);
-
-
-/***/ },
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/* 1 */,
+/* 2 */
+/***/ function(module, exports) {
 
 	module.exports = React;
 
 /***/ },
-/* 6 */,
-/* 7 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
+	'use strict';
 	
-	var React = __webpack_require__(5);
-	var ReactTransitionChildMapping = __webpack_require__(8);
-	var CSSTransitionGroupChild = __webpack_require__(9);
+	module.exports = __webpack_require__(4);
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	
-	var CSSTransitionGroup = React.createClass({displayName: "CSSTransitionGroup",
+	module.exports = __webpack_require__(5);
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(2);
+	var ReactTransitionChildMapping = __webpack_require__(6);
+	var CSSTransitionGroupChild = __webpack_require__(7);
+	
+	var CSSTransitionGroup = React.createClass({
+	  displayName: 'CSSTransitionGroup',
+	
 	  protoTypes: {
 	    component: React.PropTypes.any,
 	    transitionName: React.PropTypes.string.isRequired,
@@ -127,7 +135,7 @@
 	    transitionLeave: React.PropTypes.bool
 	  },
 	
-	  getDefaultProps:function() {
+	  getDefaultProps: function getDefaultProps() {
 	    return {
 	      component: 'span',
 	      transitionEnter: true,
@@ -135,9 +143,9 @@
 	    };
 	  },
 	
-	  getInitialState:function() {
+	  getInitialState: function getInitialState() {
 	    var ret = [];
-	    React.Children.forEach(this.props.children, function(c) {
+	    React.Children.forEach(this.props.children, function (c) {
 	      ret.push(c);
 	    });
 	    return {
@@ -145,27 +153,30 @@
 	    };
 	  },
 	
-	  componentWillMount:function() {
+	  componentWillMount: function componentWillMount() {
 	    this.currentlyTransitioningKeys = {};
 	    this.keysToEnter = [];
 	    this.keysToLeave = [];
 	  },
 	
-	  componentWillReceiveProps:function(nextProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var _this = this;
+	
 	    var nextChildMapping = [];
 	    var showProp = this.props.showProp;
+	    var exclusive = this.props.exclusive;
 	
-	    React.Children.forEach(nextProps.children, function(c) {
+	    React.Children.forEach(nextProps.children, function (c) {
 	      nextChildMapping.push(c);
 	    });
-	    var prevChildMapping = this.state.children;
-	    var newChildren = ReactTransitionChildMapping.mergeChildMappings(
-	      prevChildMapping,
-	      nextChildMapping
-	    );
+	
+	    // // last props children if exclusive
+	    var prevChildMapping = exclusive ? this.props.children : this.state.children;
+	
+	    var newChildren = ReactTransitionChildMapping.mergeChildMappings(prevChildMapping, nextChildMapping);
 	
 	    if (showProp) {
-	      newChildren = newChildren.map(function(c) {
+	      newChildren = newChildren.map(function (c) {
 	        if (!c.props[showProp] && ReactTransitionChildMapping.isShownInChildren(prevChildMapping, c, showProp)) {
 	          var newProps = {};
 	          newProps[showProp] = true;
@@ -175,70 +186,84 @@
 	      });
 	    }
 	
+	    if (exclusive) {
+	      // make middle state children invalid
+	      // restore to last props children
+	      newChildren.forEach(function (c) {
+	        _this.stop(c.key);
+	      });
+	    }
+	
 	    this.setState({
 	      children: newChildren
 	    });
 	
-	    nextChildMapping.forEach(function(c) {
+	    nextChildMapping.forEach(function (c) {
 	      var key = c.key;
 	      var hasPrev = prevChildMapping && ReactTransitionChildMapping.inChildren(prevChildMapping, c);
 	      if (showProp) {
 	        if (hasPrev) {
 	          var showInPrev = ReactTransitionChildMapping.isShownInChildren(prevChildMapping, c, showProp);
 	          var showInNow = c.props[showProp];
-	          if (!showInPrev && showInNow && !this.currentlyTransitioningKeys[key]) {
-	            this.keysToEnter.push(key);
+	          if (!showInPrev && showInNow && !_this.currentlyTransitioningKeys[key]) {
+	            _this.keysToEnter.push(key);
 	          }
 	        }
-	      } else if (!hasPrev && !this.currentlyTransitioningKeys[key]) {
-	        this.keysToEnter.push(key);
+	      } else if (!hasPrev && !_this.currentlyTransitioningKeys[key]) {
+	        _this.keysToEnter.push(key);
 	      }
-	    }.bind(this));
+	    });
 	
-	    prevChildMapping.forEach(function(c) {
+	    prevChildMapping.forEach(function (c) {
 	      var key = c.key;
 	      var hasNext = nextChildMapping && ReactTransitionChildMapping.inChildren(nextChildMapping, c);
 	      if (showProp) {
 	        if (hasNext) {
 	          var showInNext = ReactTransitionChildMapping.isShownInChildren(nextChildMapping, c, showProp);
 	          var showInNow = c.props[showProp];
-	          if (!showInNext && showInNow && !this.currentlyTransitioningKeys[key]) {
-	            this.keysToLeave.push(key);
+	          if (!showInNext && showInNow && !_this.currentlyTransitioningKeys[key]) {
+	            _this.keysToLeave.push(key);
 	          }
 	        }
-	      } else if (!hasNext && !this.currentlyTransitioningKeys[key]) {
-	        this.keysToLeave.push(key);
+	      } else if (!hasNext && !_this.currentlyTransitioningKeys[key]) {
+	        _this.keysToLeave.push(key);
 	      }
-	    }.bind(this));
+	    });
 	  },
 	
-	  performEnter:function(key) {
+	  performEnter: function performEnter(key) {
 	    this.currentlyTransitioningKeys[key] = true;
 	    var component = this.refs[key];
 	    if (component.componentWillEnter) {
-	      component.componentWillEnter(
-	        this._handleDoneEntering.bind(this, key)
-	      );
+	      component.componentWillEnter(this._handleDoneEntering.bind(this, key));
 	    } else {
 	      this._handleDoneEntering(key);
 	    }
 	  },
 	
-	  _handleDoneEntering:function(key) {
+	  _handleDoneEntering: function _handleDoneEntering(key) {
+	    //console.log('_handleDoneEntering, ', key);
 	    delete this.currentlyTransitioningKeys[key];
 	    var currentChildMapping = this.props.children;
 	    var showProp = this.props.showProp;
-	    if (!currentChildMapping || (
-	      !showProp && !ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)
-	      ) || (
-	      showProp && !ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)
-	      )) {
+	    if (!currentChildMapping || !showProp && !ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key) || showProp && !ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)) {
 	      // This was removed before it had fully entered. Remove it.
+	      //console.log('releave ',key);
 	      this.performLeave(key);
+	    } else {
+	      this.setState({ children: currentChildMapping });
 	    }
 	  },
 	
-	  performLeave:function(key) {
+	  stop: function stop(key) {
+	    delete this.currentlyTransitioningKeys[key];
+	    var component = this.refs[key];
+	    if (component) {
+	      component.stop();
+	    }
+	  },
+	
+	  performLeave: function performLeave(key) {
 	    this.currentlyTransitioningKeys[key] = true;
 	
 	    var component = this.refs[key];
@@ -252,22 +277,23 @@
 	    }
 	  },
 	
-	  _handleDoneLeaving:function(key) {
+	  _handleDoneLeaving: function _handleDoneLeaving(key) {
+	    //console.log('_handleDoneLeaving, ', key);
 	    delete this.currentlyTransitioningKeys[key];
 	    var showProp = this.props.showProp;
 	    var currentChildMapping = this.props.children;
-	    if (showProp && currentChildMapping &&
-	      ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)) {
+	    if (showProp && currentChildMapping && ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)) {
 	      this.performEnter(key);
 	    } else if (!showProp && currentChildMapping && ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)) {
 	      // This entered again before it fully left. Add it again.
+	      //console.log('reenter ',key);
 	      this.performEnter(key);
 	    } else {
-	      this.setState({children: currentChildMapping});
+	      this.setState({ children: currentChildMapping });
 	    }
 	  },
 	
-	  componentDidUpdate:function() {
+	  componentDidUpdate: function componentDidUpdate() {
 	    var keysToEnter = this.keysToEnter;
 	    this.keysToEnter = [];
 	    keysToEnter.forEach(this.performEnter);
@@ -276,27 +302,36 @@
 	    keysToLeave.forEach(this.performLeave);
 	  },
 	
-	  render:function() {
+	  render: function render() {
 	    var props = this.props;
-	    var children = this.state.children.map(function(child)  {
-	      return React.createElement(CSSTransitionGroupChild, {
-	        key: child.key, 
-	        ref: child.key, 
-	        name: props.transitionName, 
-	        enter: props.transitionEnter, 
-	        leave: props.transitionLeave}, child);
+	    var children = this.state.children.map(function (child) {
+	      return React.createElement(
+	        CSSTransitionGroupChild,
+	        {
+	          key: child.key,
+	          ref: child.key,
+	          name: props.transitionName,
+	          enter: props.transitionEnter,
+	          leave: props.transitionLeave },
+	        child
+	      );
 	    });
 	    var Component = this.props.component;
-	    return React.createElement(Component, React.__spread({},  this.props), children);
+	    return React.createElement(
+	      Component,
+	      this.props,
+	      children
+	    );
 	  }
 	});
 	module.exports = CSSTransitionGroup;
 
-
 /***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
+/* 6 */
+/***/ function(module, exports) {
 
+	'use strict';
+	
 	function inChildren(children, child) {
 	  var found = 0;
 	  children.forEach(function (c) {
@@ -311,18 +346,18 @@
 	module.exports = {
 	  inChildren: inChildren,
 	
-	  isShownInChildren:function(children, child, showProp) {
+	  isShownInChildren: function isShownInChildren(children, child, showProp) {
 	    var found = 0;
 	    children.forEach(function (c) {
 	      if (found) {
 	        return;
 	      }
-	      found = (c.key === child.key && c.props[showProp]);
+	      found = c.key === child.key && c.props[showProp];
 	    });
 	    return found;
 	  },
 	
-	  inChildrenByKey:function(children, key) {
+	  inChildrenByKey: function inChildrenByKey(children, key) {
 	    var found = 0;
 	    children.forEach(function (c) {
 	      if (found) {
@@ -333,7 +368,7 @@
 	    return found;
 	  },
 	
-	  isShownInChildrenByKey:function(children, key, showProp) {
+	  isShownInChildrenByKey: function isShownInChildrenByKey(children, key, showProp) {
 	    var found = 0;
 	    children.forEach(function (c) {
 	      if (found) {
@@ -344,7 +379,7 @@
 	    return found;
 	  },
 	
-	  mergeChildMappings:function(prev, next) {
+	  mergeChildMappings: function mergeChildMappings(prev, next) {
 	    var ret = [];
 	
 	    // For each key of `next`, the list of keys to insert before that key in
@@ -375,9 +410,8 @@
 	  }
 	};
 
-
 /***/ },
-/* 9 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -392,22 +426,30 @@
 	 * @providesModule ReactCSSTransitionGroupChild
 	 */
 	
-	"use strict";
+	'use strict';
 	
-	var React = __webpack_require__(5);
+	var React = __webpack_require__(2);
 	
-	var CSSCore = __webpack_require__(10);
-	var ReactTransitionEvents = __webpack_require__(11);
+	var CSSCore = __webpack_require__(8);
+	var ReactTransitionEvents = __webpack_require__(9);
 	
 	var TICK = 17;
 	
-	var ReactCSSTransitionGroupChild = React.createClass({displayName: "ReactCSSTransitionGroupChild",
-	  transition:function(animationType, finishCallback) {
+	var ReactCSSTransitionGroupChild = React.createClass({
+	  displayName: 'ReactCSSTransitionGroupChild',
+	
+	  transition: function transition(animationType, finishCallback) {
+	    var _this = this;
+	
 	    var node = this.getDOMNode();
 	    var className = this.props.name + '-' + animationType;
 	    var activeClassName = className + '-active';
 	
-	    var endListener = function (e) {
+	    if (this.endListener) {
+	      this.endListener();
+	    }
+	
+	    this.endListener = function (e) {
 	      if (e && e.target !== node) {
 	        return;
 	      }
@@ -415,7 +457,8 @@
 	      CSSCore.removeClass(node, className);
 	      CSSCore.removeClass(node, activeClassName);
 	
-	      ReactTransitionEvents.removeEndEventListener(node, endListener);
+	      ReactTransitionEvents.removeEndEventListener(node, _this.endListener);
+	      _this.endListener = null;
 	
 	      // Usually this optional callback is used for informing an owner of
 	      // a leave animation and telling it to remove the child.
@@ -424,7 +467,7 @@
 	      }
 	    };
 	
-	    ReactTransitionEvents.addEndEventListener(node, endListener);
+	    ReactTransitionEvents.addEndEventListener(node, this.endListener);
 	
 	    CSSCore.addClass(node, className);
 	
@@ -432,7 +475,7 @@
 	    this.queueClass(activeClassName);
 	  },
 	
-	  queueClass:function(className) {
+	  queueClass: function queueClass(className) {
 	    this.classNameQueue.push(className);
 	
 	    if (!this.timeout) {
@@ -440,27 +483,37 @@
 	    }
 	  },
 	
-	  flushClassNameQueue:function() {
+	  stop: function stop() {
+	    //console.log('force stop')
+	    if (this.timeout) {
+	      clearTimeout(this.timeout);
+	      this.classNameQueue.length = 0;
+	      this.timeout = null;
+	    }
+	    if (this.endListener) {
+	      this.endListener();
+	    }
+	  },
+	
+	  flushClassNameQueue: function flushClassNameQueue() {
 	    if (this.isMounted()) {
-	      this.classNameQueue.forEach(
-	        CSSCore.addClass.bind(CSSCore, this.getDOMNode())
-	      );
+	      this.classNameQueue.forEach(CSSCore.addClass.bind(CSSCore, this.getDOMNode()));
 	    }
 	    this.classNameQueue.length = 0;
 	    this.timeout = null;
 	  },
 	
-	  componentWillMount:function() {
+	  componentWillMount: function componentWillMount() {
 	    this.classNameQueue = [];
 	  },
 	
-	  componentWillUnmount:function() {
+	  componentWillUnmount: function componentWillUnmount() {
 	    if (this.timeout) {
 	      clearTimeout(this.timeout);
 	    }
 	  },
 	
-	  componentWillEnter:function(done) {
+	  componentWillEnter: function componentWillEnter(done) {
 	    if (this.props.enter) {
 	      this.transition('enter', done);
 	    } else {
@@ -468,7 +521,7 @@
 	    }
 	  },
 	
-	  componentWillLeave:function(done) {
+	  componentWillLeave: function componentWillLeave(done) {
 	    if (this.props.leave) {
 	      this.transition('leave', done);
 	    } else {
@@ -476,31 +529,32 @@
 	    }
 	  },
 	
-	  render:function() {
+	  render: function render() {
 	    return this.props.children;
 	  }
 	});
 	
 	module.exports = ReactCSSTransitionGroupChild;
 
-
 /***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
+/* 8 */
+/***/ function(module, exports) {
 
+	'use strict';
+	
 	var SPACE = ' ';
 	var RE_CLASS = /[\n\t\r]/g;
 	
-	var norm = function (elemClass) {
+	var norm = function norm(elemClass) {
 	  return (SPACE + elemClass + SPACE).replace(RE_CLASS, SPACE);
 	};
 	
 	module.exports = {
-	  addClass:function(elem, className) {
+	  addClass: function addClass(elem, className) {
 	    elem.className += ' ' + className;
 	  },
 	
-	  removeClass:function(elem, needle) {
+	  removeClass: function removeClass(elem, needle) {
 	    var elemClass = elem.className.trim();
 	    var className = norm(elemClass);
 	    needle = needle.trim();
@@ -513,10 +567,9 @@
 	  }
 	};
 
-
 /***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/* 9 */
+/***/ function(module, exports) {
 
 	/**
 	 * Copyright 2013-2014, Facebook, Inc.
@@ -529,7 +582,7 @@
 	 * @providesModule ReactTransitionEvents
 	 */
 	
-	"use strict";
+	'use strict';
 	/**
 	 * EVENT_NAME_MAP is used to determine which event fired when a
 	 * transition/animation ends, based on the style property used to
@@ -601,7 +654,7 @@
 	}
 	
 	var ReactTransitionEvents = {
-	  addEndEventListener:function(node, eventListener) {
+	  addEndEventListener: function addEndEventListener(node, eventListener) {
 	    if (endEvents.length === 0) {
 	      // If CSS transitions are not supported, trigger an "end animation"
 	      // event immediately.
@@ -615,7 +668,7 @@
 	
 	  endEvents: endEvents,
 	
-	  removeEndEventListener:function(node, eventListener) {
+	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
 	    if (endEvents.length === 0) {
 	      return;
 	    }
@@ -626,7 +679,6 @@
 	};
 	
 	module.exports = ReactTransitionEvents;
-
 
 /***/ }
 /******/ ]);

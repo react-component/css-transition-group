@@ -1,16 +1,17 @@
-webpackJsonp([1],[
+webpackJsonp([0],[
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(2);
+	module.exports = __webpack_require__(1);
 
 
 /***/ },
-/* 1 */,
-/* 2 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var style = '.alert-outer{\
 	position: fixed;\
@@ -51,12 +52,13 @@ webpackJsonp([1],[
 	  opacity: 0.01;\
 	}';
 	
-	/** @jsx React.DOM */
-	var React = __webpack_require__(5);
-	var CSSTransitionGroup = __webpack_require__(1);
+	var React = __webpack_require__(2);
+	var CSSTransitionGroup = __webpack_require__(3);
 	var seed = 0;
 	
-	var Alert = React.createClass({displayName: "Alert",
+	var Alert = React.createClass({
+	  displayName: 'Alert',
+	
 	  protoTypes: {
 	    time: React.PropTypes.number,
 	    type: React.PropTypes.number,
@@ -64,41 +66,45 @@ webpackJsonp([1],[
 	    onEnd: React.PropTypes.func
 	  },
 	
-	  getDefaultProps: function () {
+	  getDefaultProps: function getDefaultProps() {
 	    return {
-	      onEnd: function () {
-	      },
+	      onEnd: function onEnd() {},
 	      time: 2000,
 	      type: 'success'
-	    }
+	    };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    var props = this.props;
 	    setTimeout(function () {
 	      props.onEnd();
 	    }, props.time);
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var props = this.props;
-	    return React.createElement("div", {className: "alert alert-" + props.type}, props.str);
+	    return React.createElement(
+	      'div',
+	      { className: "alert alert-" + props.type },
+	      props.str
+	    );
 	  }
 	});
 	
+	var AlertGroup = React.createClass({
+	  displayName: 'AlertGroup',
 	
-	var AlertGroup = React.createClass({displayName: "AlertGroup",
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return {
 	      alerts: []
-	    }
+	    };
 	  },
-	  addAlert: function (a) {
+	  addAlert: function addAlert(a) {
 	    this.setState({
 	      alerts: this.state.alerts.concat(a)
 	    });
 	  },
-	  onEnd: function (key) {
+	  onEnd: function onEnd(key) {
 	    var alerts = this.state.alerts;
 	    var ret = [];
 	    var target;
@@ -116,10 +122,10 @@ webpackJsonp([1],[
 	        if (target.callback) {
 	          target.callback();
 	        }
-	      })
+	      });
 	    }
 	  },
-	  render: function () {
+	  render: function render() {
 	    var alerts = this.state.alerts;
 	    var self = this;
 	    var children = alerts.map(function (a) {
@@ -127,10 +133,16 @@ webpackJsonp([1],[
 	        seed++;
 	        a.key = seed + '';
 	      }
-	      return React.createElement(Alert, React.__spread({},  a, {onEnd: self.onEnd.bind(self, a.key)}))
+	      return React.createElement(Alert, _extends({}, a, { onEnd: self.onEnd.bind(self, a.key) }));
 	    });
-	    return React.createElement("div", {className: "alert-outer"}, 
-	      React.createElement(CSSTransitionGroup, {transitionName: "alert-anim"}, children)
+	    return React.createElement(
+	      'div',
+	      { className: "alert-outer" },
+	      React.createElement(
+	        CSSTransitionGroup,
+	        { transitionName: "alert-anim" },
+	        children
+	      )
 	    );
 	  }
 	});
@@ -161,13 +173,25 @@ webpackJsonp([1],[
 	  }
 	}
 	
-	React.render(React.createElement("div", null, 
-	    React.createElement("h1", null, "notification"), 
-	    React.createElement("style", null, style), 
-	    React.createElement("button", {onClick: onClick}, "show notification")
+	React.render(React.createElement(
+	  'div',
+	  null,
+	  React.createElement(
+	    'h1',
+	    null,
+	    'notification'
 	  ),
-	  document.getElementById('__react-content'));
-
+	  React.createElement(
+	    'style',
+	    null,
+	    style
+	  ),
+	  React.createElement(
+	    'button',
+	    { onClick: onClick },
+	    'show notification'
+	  )
+	), document.getElementById('__react-content'));
 
 /***/ }
 ]);
