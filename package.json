@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
-    "object-assign": "~2.0.0",
+    "object-assign": "~4.1.1",
     "precommit-hook": "^1.0.7",
     "rc-server": "3.x",
     "rc-tools": "3.x",
