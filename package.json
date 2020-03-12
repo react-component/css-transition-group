@@ -40,7 +40,7 @@
     "object-assign": "~2.0.0",
     "precommit-hook": "^1.0.7",
     "rc-server": "3.x",
-    "rc-tools": "3.x",
+    "rc-tools": "9.x",
     "react": "~0.13.0"
   },
   "precommit": [
