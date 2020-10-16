@@ -41,7 +41,7 @@
     "precommit-hook": "^1.0.7",
     "rc-server": "3.x",
     "rc-tools": "3.x",
-    "react": "~0.13.0"
+    "react": "~16.14.0"
   },
   "precommit": [
     "precommit"
